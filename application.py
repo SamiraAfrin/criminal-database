@@ -79,7 +79,7 @@ def dashboard():
 
 @app.route ('/validate', methods=['GET','POST'])
 def validate():
-    clr_form = SecurityForm() 
+    clr_form = SecurityForm()
     if clr_form.validate_on_submit():
         Officer_id=clr_form.Officer_id.data
         Clearance=clr_form.Clearance.data
@@ -89,11 +89,11 @@ def validate():
             db.session.merge(security_obj)
             db.session.commit()
             return redirect(url_for('dashboard'))
-    return render_template("security_clearance.html", form=clr_form) 
+    return render_template("security_clearance.html", form=clr_form)
 
 @app.route ('/show', methods=['GET','POST'])
 def show():
-    shw_form = DataForm() 
+    shw_form = DataForm()
     if shw_form.validate_on_submit():
         Officer_id=shw_form.Officer_id.data
         data = police_officers.query.filter_by(Officer_id=Officer_id).first()
@@ -108,7 +108,7 @@ def show():
             for emp in data:
                 st = st+'\n'+ " Username: " + emp.Username +'\n' + " Officer ID: " + emp.Officer_id +'\n' + " Station: " + emp.Station +'\n' +" Rank: " + emp.Rank +'\n'
             return st
-    return render_template("show.html", form=shw_form) 
+    return render_template("show.html", form=shw_form)
 
 
 if __name__ == "__main__":
