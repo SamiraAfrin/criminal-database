@@ -1,11 +1,14 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 from application import db
 
-class Users(db.Model):
+class Users(UserMixin, db.Model):
     Username = db.Column(db.String(128), primary_key=True,
         unique=True, nullable=False)
+    def get_id(self):
+        return self.Username
     Name = db.Column(db.String(128),unique=True,
         nullable=False)
     NID_No = db.Column(db.String(10), unique=True, nullable=True)
@@ -46,7 +49,7 @@ class criminal(db.Model):
     Phone_No = db.Column(db.String(64))
     Address = db.Column(db.String(128))
 
-    remarks = db.relationship("Criminal_Remarks",backref="criminal")
+    remarks = db.relationship("criminal_remarks",backref="criminal")
     medicals = db.relationship("medical_history",backref="criminal")
     polices_caught = db.relationship("Caught_by",backref="criminal")
     crimes_commited = db.relationship("Committed_by",backref="criminal")
@@ -111,7 +114,7 @@ class Rape(db.Model):
     Case_No = db.Column(db.Integer(), db.ForeignKey("crime.Case_No"), primary_key = True)
 
 
-class Criminal_Remarks(db.Model):
+class criminal_remarks(db.Model):
     Criminal_id = db.Column(db.Integer(), db.ForeignKey("criminal.Criminal_id"), primary_key=True)
     Remark = db.Column(db.String(64),primary_key=True)
 

@@ -1,0 +1,57 @@
+{% from 'form_helper.html' import displayField %}
+
+{% extends "prelogin-layout.html" %}
+
+{% block metadata %}
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/default.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/dashstylesheet.css') }}">
+{% endblock %}
+{% block content %}
+<div id=header>
+  <h1>POLICE DEPARTMENT</h1>
+</div>
+<div id=container>
+<div id=nav>
+<center>
+
+  <!-- Only change the 'This is navigation' to the name of the feature -->
+
+    <a href="https://www.google.com/">Google a jao</a>
+    <a href="https://www.facebook.com/">This is facebook vai</a>
+    <a href="https://www.gmail.com/">This is gmail vai</a>
+</center>
+</div>
+<div id=info>
+    <center><h3>Show Data</h3></center>
+        <table style="margin-left: 90px;">
+
+               <tr style="color: black; ">
+               <th>Username</th>
+               <th>Officer ID</th>
+               <th>Station</th>
+               <th>Rank</th>
+               </tr>
+
+           <tr>
+           <td>
+               {{query.Username}}
+            </td>
+            <td>
+               {{query.Officer_id}}
+           </td>
+           <td>
+               {{query.Station}}
+           </td>
+           <td>
+               {{query.Rank}}
+           </td>
+           </tr>
+
+
+
+        </table>
+</div>
+</div>
+{% endblock %}

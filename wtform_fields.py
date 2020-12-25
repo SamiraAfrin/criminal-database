@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, IntegerField, SelectField, SubmitField
 from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
 from passlib.hash import pbkdf2_sha256
-from models import *
+from models import Users
 
 
 def validate_credentials(form, field):
@@ -64,13 +64,49 @@ class LoginForm(FlaskForm):
     submit_button = SubmitField('Login')
 
 
+class CriminalForm(FlaskForm):
+    name = StringField('name_label', validators=[InputRequired()])
+    age = IntegerField('age_label', validators=[InputRequired()])
+    nationality = StringField('nationality_label')
+    nid_no = IntegerField('nid_label')
+    motive = StringField('motive_label')
+    phone_number = StringField('phone_number_label')
+    address = StringField('address_label')
+    remark = StringField('remark_label')
+    submit_button = SubmitField('Submit')
+
+
+
+
+
+
 class SecurityForm(FlaskForm):
     choice = [1,2,3,4,5,6,7,8,9,10]
+    Off = StringField('Offier_id_label' )
+    Cas = StringField('Case_No_label' )
 
-    Officer_id = StringField('Offier_id_label' , validators=[InputRequired(message="Input required")])
+    Officer_id = StringField('Offier_id_label')
     Clearance = SelectField(u'Choose',choices=choice)
-    submit_button = SubmitField('Update')
+
+
+    submit_button = SubmitField()
 
 class DataForm (FlaskForm):
-    Officer_id = StringField('Offier_id_label' , validators=[InputRequired(message="Input required")])
+    Officer_id = StringField('Offier_id_label')
     submit_button = SubmitField('Click Here')
+
+class TableForm(FlaskForm):
+    choice=['Report On Officer','Crime Report','Criminal Report','Medical Team']
+
+    T_name = SelectField(u'Choose',choices=choice)
+    submit_button = SubmitField('Click Here')
+
+class AttributeForm(FlaskForm):
+    Atr= IntegerField('Attrubute_label', validators=[InputRequired(message="InputRequired")])
+    submit_button = SubmitField('Click Here')
+
+
+
+class TestForm(FlaskForm):
+    name = StringField()
+    length = IntegerField()

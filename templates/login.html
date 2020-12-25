@@ -18,17 +18,22 @@
 				<img src="{{ url_for('static', filename='images/2.jpg') }}" alt='Police Icon'>
 			</div>
 			<div id=center>
-				<form action="{{ url_for('login') }}", method="POST">
-					<label for="username">Username:</label><br>
+				<form action="{{ url_for('Login') }}", method="POST">
 					<!-- Connecting the username attribute from LoginForm class in wtforms.py file and checking for error -->
 					{{ displayField(form.username,'Username',autocomplete='off',autofocus=true) }}
 
-					<label for="pass">Password:</label><br>
 					<!-- Connecting the password from LoginForm class in wtforms.py file and checking for error -->
 					{{ displayField(form.password,'Password') }}
 
 					<center>{{ form.submit_button }}</center><br>
 					{{ form.csrf_token }}
+					<center>
+						{% with messages = get_flashed_messages(with_categories=true) %}
+				            {% if messages %}
+				                {{ messages[0][1] }}
+				            {% endif %}
+				        {% endwith %}
+					</center>
 				</form>
 			</div>
 	</div>

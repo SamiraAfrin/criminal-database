@@ -1,0 +1,44 @@
+{% from 'form_helper.html' import displayField %}
+
+{% extends "prelogin-layout.html" %}
+
+{% block metadata %}
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/default.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/dashstylesheet.css') }}">
+{% endblock %}
+{% block content %}
+<div id=header>
+  <h1>POLICE DEPARTMENT</h1>
+</div>
+<div id=container>
+<div id=nav>
+<center>
+
+  <!-- Only change the 'This is navigation' to the name of the feature -->
+
+  <a href='{{ url_for('showcriminals') }}'>Criminal</a>
+  <a href='{{url_for('Table')}}'>Tables</a>
+  <a href='{{ url_for('validate') }}'>Security Clearance</a>
+  <a href='{{url_for('showcriminals')}}'>Officers</a>
+
+</center>
+</div>
+<div id=info>
+    <center><h3>Security Clearance</h3></center>
+    <div id=center>
+		<form action="{{ url_for('Table') }}", method="POST">
+			<center>
+                <label for="T_name">Table:</label><br>
+			    {{ form.T_name(class='form-control') }}
+            </center><br>
+			<center>{{ form.submit_button }}</center><br>
+			{{ form.csrf_token }}
+		</form>
+	</div>
+
+
+</div>
+</div>
+{% endblock %}

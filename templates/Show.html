@@ -18,23 +18,24 @@
 
   <!-- Only change the 'This is navigation' to the name of the feature -->
 
-    <a href="https://www.google.com/">Google a jao</a>
-    <a href="https://www.facebook.com/">This is facebook vai</a>
-    <a href="https://www.gmail.com/">This is gmail vai</a>
+  <a href='{{ url_for('showcriminals') }}'>Criminal</a>
+  <a href='{{url_for('Table')}}'>Tables</a>
+  <a href='{{ url_for('validate') }}'>Security Clearance</a>
+  <a href='{{url_for('showofficer')}}'>Officers</a>
 </center>
 </div>
 <div id=info>
     <center><h3>Show Data</h3></center>
     <div id=center>
-		<form action="{{ url_for('show') }}", method="POST">
-			<center> <label for=" Officer_id">Officer ID:</label> <br>
-			{{ displayField(form.Officer_id,'Enter Officer ID',autocomplete='off',autofocus=true) }}</center><br>
+		<form action="{{ url_for('showofficer') }}", method="POST">
+
+			<center>{{ displayField(form.Officer_id,'Enter Officer_id',autocomplete='off',autofocus=true) }}</center>
 			<center>{{ form.submit_button }}</center><br>
 			{{ form.csrf_token }}
 		</form>
 	</div>
 
-      
+
 </div>
 </div>
 {% endblock %}
