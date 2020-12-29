@@ -183,7 +183,7 @@ def validate():
             return  redirect(url_for('Search',keys1=Cas))
 
 
-    return render_template("security_clearance.html", flag=True, form=clr_form, data1=pol, head1=pol[0].keys(), data2=crim, head2=crim[0].keys())
+    return render_template("admin_security_clearance.html", flag=True, form=clr_form, data1=pol, head1=pol[0].keys(), data2=crim, head2=crim[0].keys())
 
 
 
@@ -195,12 +195,12 @@ def Search(keys1):
     if o1_obj:
         stmt1 = 'Select o.Username,o.Officer_id,o.Station,o.Rank,o.Clearance from Users u, police_officers o where o.Username = u.Username and o.officer_id = "'+keys1+'"'
         pol1 = db.session.execute(stmt1).fetchall()
-        return render_template('security_clearance.html',form=clr_form, data=pol1, head=pol1[0].keys(), flag=False)
+        return render_template('admin_security_clearance.html',form=clr_form, data=pol1, head=pol1[0].keys(), flag=False)
     elif p1_obj:
         stmt2='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND c.Case_No = "'+keys1+'"'
         crim2 = db.session.execute(stmt2).fetchall()
-        return render_template('security_clearance.html',form=clr_form, data=crim2, head=crim2[0].keys(), flag=False)
-    return render_template("security_clearance.html", form=clr_form)
+        return render_template('admin_security_clearance.html',form=clr_form, data=crim2, head=crim2[0].keys(), flag=False)
+    return render_template("admin_security_clearance.html", form=clr_form)
 
 
 
@@ -218,27 +218,27 @@ def Table():
         #return render_template("present.html", query=Users.query.all(),form=tb_form,c=1)
             stmt = 'Select o.Username,u.Name,o.Officer_id,u.NID_No,u.Gender,u.Phone_No,u.Personal_email,u.Department_email,o.Station,o.Rank,o.Clearance from Users u, police_officers o where u.username = o.username'
             crims = db.session.execute(stmt).fetchall()
-            return render_template('present.html', data=crims, head=crims[0].keys())
+            return render_template('admin_any_table.html', data=crims, head=crims[0].keys(),c=2)
         elif s=='Crime Report':
             stmt='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No'
             crims = db.session.execute(stmt).fetchall()
-            return render_template('present.html', data=crims, head=crims[0].keys())
+            return render_template('admin_any_table.html', data=crims, head=crims[0].keys(),c=2)
         elif s=="Criminal Report":
             stmt = 'Select c.Criminal_id,c.Name,c.Age,c.Nationality,c.Nid_No,c.Motive,c.Phone_No,c.Address,cr.Remark from criminal c, Criminal_Remarks cr where c.Criminal_id = cr.Criminal_id'
             crims = db.session.execute(stmt).fetchall()
-            return render_template('present.html', data=crims, head=crims[0].keys())
+            return render_template('admin_any_table.html', data=crims, head=crims[0].keys(),c=2)
         elif s=='Medical Team':
             stmt = 'Select * from medical_history'
             crims = db.session.execute(stmt).fetchall()
-            return render_template('present.html', data=crims, head=crims[0].keys())
-    return render_template('any_table.html', form=tb_form)
+            return render_template('admin_any_table.html', data=crims, head=crims[0].keys(),c=2)
+    return render_template('admin_any_table.html',c=1, form=tb_form)
 
 
 @app.route ('/Attr', methods=['GET','POST'])
 def Attr():
     at_form = AttributeForm()
 
-    return render_template('Create_Table.html', c=1,form=at_form)
+    return render_template('admin_create_table.html', c=1,form=at_form)
 
 
 @app.route ('/CreateTable', methods=['GET','POST'])
@@ -256,7 +256,7 @@ def CreateTable():
             if name and name.lower() in p:
                 flash("Table Exists. Try Again", 'danger')
                 '''  Have to fixed Flash '''
-                return render_template('Create_Table.html', c=1,form=at_form)
+                return render_template('admin_create_table.html', c=1,form=at_form)
 
             if num is None:
                 """table create"""
@@ -274,7 +274,7 @@ def CreateTable():
 
                 return redirect(url_for('Attr'))
 
-            return render_template('Create_Table.html',num=num,c=2,form=at_form)
+            return render_template('admin_create_table.html',num=num,c=2,form=at_form)
         return redirect(url_for('Attr'))
 
 

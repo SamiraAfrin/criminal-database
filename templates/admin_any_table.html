@@ -1,4 +1,4 @@
-{% from 'form_helper.html' import displayField %}
+{% from 'form_helper.html' import displayField, displayTable %}
 
 {% extends "prelogin-layout.html" %}
 
@@ -38,7 +38,7 @@
     		</form>
     	</div>
     {% endif %}
-    {if c==2 %}
+    {% if c==2 %}
         <center><h3>Show Data</h3></center>
         <!-- This is for User Table-->
 

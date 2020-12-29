@@ -1,0 +1,57 @@
+{% from 'form_helper.html' import displayField, displayTable %}
+
+{% extends "prelogin-layout.html" %}
+
+{% block metadata %}
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/default.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/dashstylesheet.css') }}">
+{% endblock %}
+{% block content %}
+<div id=header>
+  <h1>POLICE DEPARTMENT</h1>
+</div>
+<div id=container>
+<div id=nav>
+<center>
+
+  <!-- Only change the 'This is navigation' to the name of the feature -->
+
+  <a href='{{url_for('Table')}}'> Show Tables</a>
+  <a href='{{ url_for('validate') }}'>Security Clearance</a>
+  <a href='{{ url_for('Attr') }}'>Create New Table</a>
+
+
+</center>
+</div>
+<div id=info>
+    <center><h3>Security Clearance</h3></center>
+    <div id=center>
+		<form action="{{ url_for('validate') }}", method="POST">
+            {{ displayField(form.Off,'Enter Officer ID',autocomplete='off',autofocus=true) }}
+            <br>
+            {{ displayField(form.Cas,'Enter Case Number',autocomplete='off') }}
+            <br>
+            {{ form.submit_button(value='Search') }}
+            <br>
+            {{ displayField(form.Officer_id,'Enter Officer ID',autocomplete='off') }}
+            <label for="Clearance">Clearance:</label><br>
+			{{ form.Clearance(class='form-control') }}
+            <br>
+            {{ form.submit_button(value='Update') }}
+            <br>
+			{{ form.csrf_token }}
+		</form>
+	</div>
+    <div>
+        {% if flag %}
+            {{ displayTable(data1, head1) }}
+            {{ displayTable(data2, head2) }}
+        {% else %}
+            {{ displayTable(data,head) }}
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}
