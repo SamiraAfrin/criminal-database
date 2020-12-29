@@ -21,7 +21,9 @@
 
     <a href='{{url_for('Table')}}'> Show Tables</a>
     <a href='{{ url_for('validate') }}'>Security Clearance</a>
-     <a href='{{ url_for('Attr') }}'>Create New Table</a>
+    <a href='{{ url_for('Attr') }}'>Create New Table</a>
+    <a href='{{ url_for('AddColumn') }}'>Create New Column</a>
+    <a href='{{ url_for('ShowReport') }}'>Show Report</a>
 	</center>
   </div>
   <div id=info>
@@ -38,35 +40,33 @@
                 <form action="{{ url_for('CreateTable') }}", method="POST">
                     <label for="at">Table Name:</label><br>
                     <input type='text' id='name', name='name' placeholder='Table Name'><br>
-                {% for i in range (num) %}
-                        <label for="at">Attribute Name:</label><br>
-                        <input type="text" id="at" name="at" placeholder="Enter Attribute Name"><br>
-                        <label for="id1">Attribute Type :</label><br>
-                        <select name="op" id="op">
-                            <option value="0">Select Attrribute Type:</option>
-                            <option value="VARCHAR">String</option>
-                            <option value="INT">Integer</option>
-                            <option value="SMALLINT">SmallInteger</option>
-                            <option value="Date">Date</option>
-                        </select><br>
+                    {% for i in range (num) %}
+                            <label for="at">Attribute Name:</label><br>
+                            <input type="text" id="at" name="at" placeholder="Enter Attribute Name"><br>
+                            <label for="id1">Attribute Type :</label><br>
+                            <select name="op" id="op">
+                                <option value="0">Select Attrribute Type:</option>
+                                <option value="VARCHAR">String</option>
+                                <option value="INT">Integer</option>
+                                <option value="SMALLINT">SmallInteger</option>
+                                <option value="Date">Date</option>
+                            </select><br>
 
-                        <label for="ta">Attribute Length:</label><br>
+                            <label for="ta">Attribute Length:</label><br>
 
-                        <input type="number" id="ta" name="ta" placeholder="Attribute Length"><br>
+                            <input type="number" id="ta" name="ta" placeholder="Attribute Length"><br>
 
-                {% endfor %}
-                        <input type="submit">
+                    {% endfor %}
+                    <input type="submit">
                 </form>
-            {% else %}
-                <form action="{{ url_for('CreateTable') }}", method="POST">
-                    <center>{{ displayField(form.Attr,'Number of Attribute',autocomplete='off') }}</center>
-        			<center>{{ form.submit_button }}</center><br>
-        			{{ form.csrf_token }}
-                </form>
-
-            {% endif%}
-
-
+                {% else %}
+                    <form action="{{ url_for('CreateTable') }}", method="POST">
+                        {{ displayField(form.Attr,'Number of Attribute',autocomplete='off') }}
+            			{{ form.submit_button }}
+                        <br>
+            			{{ form.csrf_token }}
+                    </form>
+                {% endif%}
   </div>
 </div>
 {% endblock %}
