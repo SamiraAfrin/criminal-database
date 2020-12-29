@@ -2,6 +2,8 @@ from datetime import datetime
 from flask import Flask , render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, login_user, current_user, logout_user
 from sqlalchemy import select
+from sqlalchemy import create_engine,Table, Column,Integer, String, MetaData,Date, Boolean
+from sqlalchemy.orm import sessionmaker
 
 from wtform_fields import *
 from models import *
@@ -11,12 +13,16 @@ app.secret_key = 'replace later'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/criminal_database'   # Connecting to database
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+engine = create_engine("mysql+pymysql://root:@localhost/criminal_database")
+
 
 db = SQLAlchemy(app)   # Creating the database object
 
 log_in = LoginManager(app)   # Configuring flask-login
 log_in.init_app(app)
 
+
+Name=''
 
 @log_in.user_loader
 def load_user(username):
@@ -171,15 +177,9 @@ def validate():
     o1_obj = police_officers.query.filter_by(Officer_id=Off).first()
     p1_obj = crime.query.filter_by(Case_No=Cas).first()
     if o1_obj or p1_obj:
-        '''stmt1 = 'Select o.Username,o.Officer_id,o.Station,o.Rank,o.Clearance from Users u, police_officers o where o.Username = u.Username and o.officer_id = "'+Off+'"'
-        pol1 = db.session.execute(stmt1).fetchall()
-        return render_template('present.html', data1=pol1, head1=pol1[0].keys())
-    if p1_obj:
-        stmt2='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND c.Case_No = "'+Cas+'"'
-        crim2 = db.session.execute(stmt2).fetchall()'''
         if o1_obj:
             return redirect(url_for('Search',keys1=Off))
-        if p1_obj:
+        elif p1_obj:
             return  redirect(url_for('Search',keys1=Cas))
 
 
@@ -211,10 +211,10 @@ def Search(keys1):
 
 @app.route ('/show1', methods=['GET','POST'])
 def Table():
-    tb_form = TableForm()
+    tb_form = InformationForm()
     if tb_form.validate_on_submit():
         s=tb_form.T_name.data
-        if s=='Report On Officer':
+        if s=='Officer Information':
         #return render_template("present.html", query=Users.query.all(),form=tb_form,c=1)
             stmt = 'Select o.Username,u.Name,o.Officer_id,u.NID_No,u.Gender,u.Phone_No,u.Personal_email,u.Department_email,o.Station,o.Rank,o.Clearance from Users u, police_officers o where u.username = o.username'
             crims = db.session.execute(stmt).fetchall()
@@ -234,23 +234,48 @@ def Table():
     return render_template('any_table.html', form=tb_form)
 
 
-@app.route ('/create_table', methods=['GET','POST'])
+@app.route ('/Attr', methods=['GET','POST'])
 def Attr():
     at_form = AttributeForm()
 
     return render_template('Create_Table.html', c=1,form=at_form)
 
 
-@app.route ('/complete', methods=['GET','POST'])
-def TableCall():
-    at_form = AttributeForm()
-    if at_form.validate_on_submit():
-        num = at_form.Atr.data
-        return render_template('Create_Table.html',num=2,c=2)
+@app.route ('/CreateTable', methods=['GET','POST'])
+def CreateTable():
+        at_form = AttributeForm()
 
+        num = at_form.Attr.data
+        p = db.engine.table_names()
 
-    return redirect(url_for('Attr'))
+        if request.method=="POST":
+            name = request.form.get('name')
+            column_names=request.form.getlist('at')
+            column_types=request.form.getlist('op')
+            column_len=request.form.getlist('ta')
+            if name and name.lower() in p:
+                flash("Table Exists. Try Again", 'danger')
+                '''  Have to fixed Flash '''
+                return render_template('Create_Table.html', c=1,form=at_form)
 
+            if num is None:
+                """table create"""
+
+                stmt = f'Create Table {name} ( Case_No INT, '
+                for index, (name, type, length) in enumerate(zip(column_names, column_types, column_len)):
+                    if type == 'VARCHAR':
+                        stmt += name + ' ' + type + f'({length}),' if index < len(column_names) - 1 else name + ' ' + type + f'({length})'
+                    else:
+                        stmt += name + ' ' + type + ',' if index < len(column_names) - 1 else name + ' ' + type
+                stmt+=" , FOREIGN KEY(Case_No) REFERENCES Crime(Case_No) ON UPDATE CASCADE ON DELETE CASCADE" +');'
+
+                db.session.execute(stmt)
+                db.session.commit()
+
+                return redirect(url_for('Attr'))
+
+            return render_template('Create_Table.html',num=num,c=2,form=at_form)
+        return redirect(url_for('Attr'))
 
 
 
@@ -270,6 +295,11 @@ def test1():
     return 'hoise toh'''
 
 
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    print(db.engine.pool.status())
+    db.session.remove()
+    db.engine.dispose()
 
 
 if __name__ == "__main__":

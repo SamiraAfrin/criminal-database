@@ -95,14 +95,14 @@ class DataForm (FlaskForm):
     Officer_id = StringField('Offier_id_label')
     submit_button = SubmitField('Click Here')
 
-class TableForm(FlaskForm):
-    choice=['Report On Officer','Crime Report','Criminal Report','Medical Team']
+class InformationForm(FlaskForm):
+    choice=['Choose One','Officer Information','Crime Report','Criminal Report','Medical Team']
 
     T_name = SelectField(u'Choose',choices=choice)
     submit_button = SubmitField('Click Here')
 
 class AttributeForm(FlaskForm):
-    Atr= IntegerField('Attrubute_label', validators=[InputRequired(message="InputRequired")])
+    Attr= IntegerField('Attr_label', validators=[InputRequired(message="InputRequired")])
     submit_button = SubmitField('Click Here')
 
 

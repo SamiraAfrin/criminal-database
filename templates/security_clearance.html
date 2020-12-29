@@ -18,9 +18,9 @@
 
   <!-- Only change the 'This is navigation' to the name of the feature -->
 
-  <a href='{{ url_for('showcriminals') }}'>Criminal</a>
-  <a href='{{ url_for('Table')}}'>Tables</a>
+  <a href='{{url_for('Table')}}'> Show Tables</a>
   <a href='{{ url_for('validate') }}'>Security Clearance</a>
+  <a href='{{ url_for('Attr') }}'>Create New Table</a>
 
 
 </center>
@@ -30,28 +30,28 @@
     <div id=center>
 		<form action="{{ url_for('validate') }}", method="POST">
             {{ displayField(form.Off,'Enter Officer ID',autocomplete='off',autofocus=true) }}
+            <br>
             {{ displayField(form.Cas,'Enter Case Number',autocomplete='off') }}
+            <br>
             {{ form.submit_button(value='Search') }}
-
-			<center>{{ displayField(form.Officer_id,'Enter Officer ID',autocomplete='off') }}</center>
-			<center>
-                <label for="Clearance">Clearance:</label><br>
-			    {{ form.Clearance(class='form-control') }}
-            </center><br>
-			<center>{{ form.submit_button(value='Update') }}</center><br>
+            <br>
+            {{ displayField(form.Officer_id,'Enter Officer ID',autocomplete='off') }}
+            <label for="Clearance">Clearance:</label><br>
+			{{ form.Clearance(class='form-control') }}
+            <br>
+            {{ form.submit_button(value='Update') }}
+            <br>
 			{{ form.csrf_token }}
 		</form>
 	</div>
-        <div>
-            {% if flag %}
-                {{ displayTable(data1, head1) }}
-                {{ displayTable(data2, head2) }}
-            {% else %}
-                {{ displayTable(data,head) }}
-            {% endif %}
-        </div>
-
-
+    <div>
+        {% if flag %}
+            {{ displayTable(data1, head1) }}
+            {{ displayTable(data2, head2) }}
+        {% else %}
+            {{ displayTable(data,head) }}
+        {% endif %}
+    </div>
 </div>
 </div>
 {% endblock %}

@@ -18,27 +18,34 @@
 
   <!-- Only change the 'This is navigation' to the name of the feature -->
 
-  <a href='{{ url_for('showcriminals') }}'>Criminal</a>
-  <a href='{{url_for('Table')}}'>Tables</a>
+  <a href='{{url_for('Table')}}'> Show Tables</a>
   <a href='{{ url_for('validate') }}'>Security Clearance</a>
-  <a href='{{url_for('showcriminals')}}'>Officers</a>
+  <a href='{{ url_for('Attr') }}'>Create New Table</a>
 
 </center>
 </div>
 <div id=info>
-    <center><h3>Security Clearance</h3></center>
-    <div id=center>
-		<form action="{{ url_for('Table') }}", method="POST">
-			<center>
-                <label for="T_name">Table:</label><br>
-			    {{ form.T_name(class='form-control') }}
-            </center><br>
-			<center>{{ form.submit_button }}</center><br>
-			{{ form.csrf_token }}
-		</form>
-	</div>
+    {% if c==1 %}
+        <h3>Show Information </h3>
+        <div id=center>
+    		<form action="{{ url_for('Table') }}", method="POST">
+                <label for="T_name">Choose Table:</label><br>
+    			{{ form.T_name(class='form-control') }}
+                <br>
+    			{{ form.submit_button }}
+                <br>
+    			{{ form.csrf_token }}
+    		</form>
+    	</div>
+    {% endif %}
+    {if c==2 %}
+        <center><h3>Show Data</h3></center>
+        <!-- This is for User Table-->
 
-
+        <div>
+            {{ displayTable(data,head) }}
+        </div>
+    {% endif %}
 </div>
 </div>
 {% endblock %}

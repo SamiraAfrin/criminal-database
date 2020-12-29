@@ -19,52 +19,54 @@
 
 	<!-- Only change the 'This is navigation' to the name of the feature -->
 
-    <a href='{{ url_for('showcriminals') }}'>Criminal</a>
-    <a href='{{url_for('Table')}}'>Tables</a>
+    <a href='{{url_for('Table')}}'> Show Tables</a>
     <a href='{{ url_for('validate') }}'>Security Clearance</a>
-    <a href='{{url_for('showcriminals')}}'>Officers</a>
+     <a href='{{ url_for('Attr') }}'>Create New Table</a>
 	</center>
   </div>
   <div id=info>
 	  		<!-- Change this if needed -->
-			<center><h3>Create Table</h3></center>
-            {% if c==2 %}
-                <!--<form action="{{ url_for('TableCall') }}", method="POST">
-                    <label for="at">Table Name:</label><br><br>
-                    <input type="text" id="at" name="at" placeholder="Enter Table Name"
-                    <label for="at1">Case Number:</label><br><br>
-                    <input type="number" id="at1" name="at1" placeholder="Enter Case Number"
-                </form>-->
-
+			<center>
+                <h3>Create Table</h3>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {{ messages[0][1] }}
+                    {% endif %}
+                {% endwith %}
+            </center>
+                {% if c==2 %}
+                <form action="{{ url_for('CreateTable') }}", method="POST">
+                    <label for="at">Table Name:</label><br>
+                    <input type='text' id='name', name='name' placeholder='Table Name'><br>
                 {% for i in range (num) %}
-                    <form action="{{ url_for('TableCall') }}", method="POST">
-                        <label for="at">Attribute Name:</label><br><br>
-                        <input type="text" id="at" name="at" placeholder="Enter Attribute Name">
-                        <select>
+                        <label for="at">Attribute Name:</label><br>
+                        <input type="text" id="at" name="at" placeholder="Enter Attribute Name"><br>
+                        <label for="id1">Attribute Type :</label><br>
+                        <select name="op" id="op">
                             <option value="0">Select Attrribute Type:</option>
-                            <option value="1">String</option>
-                            <option value="2">Integer</option>
-                            <option value="3">Boolean</option>
-                            <option value="4">SmallInteger</option>
-                        </select>
-                        <label for="ta">Attribute Length:</label><br><br>
-                        <input type="number" id="ta" name="ta" placeholder="Enter Attribute Length .(Note: 11 for int and 1 for boolean)">
-                        <input type="submit">
-                    </form>
+                            <option value="VARCHAR">String</option>
+                            <option value="INT">Integer</option>
+                            <option value="SMALLINT">SmallInteger</option>
+                            <option value="Date">Date</option>
+                        </select><br>
+
+                        <label for="ta">Attribute Length:</label><br>
+                        
+                        <input type="number" id="ta" name="ta" placeholder="Attribute Length"><br>
+
                 {% endfor %}
-            {% endif %}
-            {% if c==1%}
-                <form action="{{ url_for('TableCall') }}", method="POST">
-                    <center>{{ displayField(form.Atr,'Enter Number of Attribute',autocomplete='off',autofocus=true) }}</center>
+                        <input type="submit">
+                </form>
+            {% else %}
+                <form action="{{ url_for('CreateTable') }}", method="POST">
+                    <center>{{ displayField(form.Attr,'Number of Attribute',autocomplete='off') }}</center>
         			<center>{{ form.submit_button }}</center><br>
         			{{ form.csrf_token }}
                 </form>
 
             {% endif%}
 
-			<!-- Only add html code here after removing the placeholder text
-			<p>This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text. This is placeholder Text.
-			</p>-->
+
   </div>
 </div>
 {% endblock %}
