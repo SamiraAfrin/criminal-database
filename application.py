@@ -306,10 +306,11 @@ def AddColumn():
 
 @app.route ('/ShowReport', methods=['GET','POST'])
 def ShowReport():
-    #p=current_user.get_id()
-    p = "nil_roy"
-    stmt='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  police_officers po, investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND po.Clearance >=c.Clearance AND po.username = "'+p+'"'
-    crims = db.session.execute(stmt).fetchall()
+    if current_user.is_authenticated:
+        p=current_user.get_id()
+        stmt='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  police_officers po, investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND po.Clearance <=c.Clearance AND po.username = "'+p+'"'
+        crims = db.session.execute(stmt).fetchall()
+        return render_template('admin_any_table.html', data=crims, head=crims[0].keys(),c=2)
     return render_template('admin_any_table.html',c=2)
 
 
