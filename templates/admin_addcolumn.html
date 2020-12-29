@@ -1,0 +1,61 @@
+{% from 'form_helper.html' import displayField %}
+
+{% extends "prelogin-layout.html" %}
+
+{% block metadata %}
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/default.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/dashstylesheet.css') }}">
+{% endblock %}
+{% block content %}
+<div id=header>
+  <h1>POLICE DEPARTMENT</h1>
+</div>
+<div id=container>
+<div id=nav>
+<center>
+
+  <!-- Only change the 'This is navigation' to the name of the feature -->
+
+  <a href='{{url_for('Table')}}'> Show Tables</a>
+  <a href='{{ url_for('validate') }}'>Security Clearance</a>
+  <a href='{{ url_for('Attr') }}'>Create New Table</a>
+</center>
+</div>
+<div id=info>
+    <center>
+        <h3>Add Column </h3>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {{ messages[0][1] }}
+            {% endif %}
+        {% endwith %}
+    </center>
+
+        <form action="{{ url_for('AddColumn') }}", method="POST">
+            <label for="at">Table Name:</label><br>
+            <input type='text' id='name', name='name' placeholder='Table Name'><br>
+
+                <label for="at">Attribute Name:</label><br>
+                <input type="text" id="at" name="at" placeholder="Enter Attribute Name"><br>
+                <label for="id1">Attribute Type :</label><br>
+                <select name="op" id="op">
+                    <option value="0">Select Attrribute Type:</option>
+                    <option value="VARCHAR">String</option>
+                    <option value="INT">Integer</option>
+                    <option value="SMALLINT">SmallInteger</option>
+                    <option value="Date">Date</option>
+                </select><br>
+
+                <label for="ta">Attribute Length:</label><br>
+
+                <input type="number" id="ta" name="ta" placeholder="Attribute Length"><br>
+
+
+                <input type="submit">
+        </form>
+
+</div>
+</div>
+{% endblock %}

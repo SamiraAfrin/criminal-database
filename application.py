@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Flask , render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, login_user, current_user, logout_user
-from sqlalchemy import select
+from sqlalchemy import select,DDL
 from sqlalchemy import create_engine,Table, Column,Integer, String, MetaData,Date, Boolean
 from sqlalchemy.orm import sessionmaker
 
@@ -276,6 +276,34 @@ def CreateTable():
 
             return render_template('admin_create_table.html',num=num,c=2,form=at_form)
         return redirect(url_for('Attr'))
+
+
+@app.route ('/AddColumn', methods=['GET','POST'])
+def AddColumn():
+        all_table=db.engine.table_names()
+        Tname = request.form.get('name')
+        column_name=request.form.get('at')
+        column_type=request.form.get('op')
+        column_len=request.form.get('ta')
+
+        if Tname in all_table:
+            #findimg all meta data of a table
+            stmt2="Select * from "+Tname
+            crim2 = db.session.execute(stmt2).fetchall()
+            column=(crim2[0].keys())
+            all_column = [item.lower() for item in column]
+
+            if (column_name.lower()) in all_column:
+                flash("Column Exists. Try Again", 'danger')
+            else:
+                stmt="ALTER TABLE " + Tname + " ADD " + column_name + " " + column_type+ "(" + column_len + ");"
+                add_column =DDL(stmt)
+                engine.execute(add_column)
+                flash("Column Added.", 'success')
+
+        else:
+            flash("Table Doesnot Exist. Try Again", 'danger')
+        return render_template('admin_addcolumn.html')
 
 
 
