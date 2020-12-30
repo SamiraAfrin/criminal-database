@@ -80,15 +80,16 @@ class CriminalForm(FlaskForm):
 
 
 
+class OfficersSearchForm(FlaskForm):
+    Officer_id = StringField('Officer_id_label' )
+    Case_No = StringField('Case_No_label' )
+    submit_button = SubmitField()
+
+
 class SecurityForm(FlaskForm):
     choice = [1,2,3,4,5,6,7,8,9,10]
-    Off = StringField('Offier_id_label' )
-    Cas = StringField('Case_No_label' )
-
     Officer_id = StringField('Offier_id_label')
     Clearance = SelectField(u'Choose',choices=choice)
-
-
     submit_button = SubmitField()
 
 class DataForm (FlaskForm):

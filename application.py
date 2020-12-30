@@ -153,10 +153,18 @@ def insert_criminal():
 
 
 
+
+
+
+
+
+
 @app.route('/validate',methods=['GET','POST'])
 def validate():
     clr_form = SecurityForm()
+    print("ami")
     if clr_form.validate_on_submit():
+        print("ashci")
         Officer_id=clr_form.Officer_id.data
         Clearance=clr_form.Clearance.data
         security_obj = police_officers.query.filter_by(Officer_id=Officer_id).first()
@@ -167,40 +175,57 @@ def validate():
             stmt='Select * from police_officers'
             crims = db.session.execute(stmt).fetchall()
             return redirect(url_for('validate'))
+        else:
+            return redirect(url_for('Search'))
 
     stmt1 = 'SELECT * from police_officers'
     stmt2 = 'select * from crime'
     pol = db.session.execute(stmt1).fetchall()
     crim = db.session.execute(stmt2).fetchall()
-    Off=clr_form.Off.data
-    Cas=clr_form.Cas.data
-    o1_obj = police_officers.query.filter_by(Officer_id=Off).first()
-    p1_obj = crime.query.filter_by(Case_No=Cas).first()
-    if o1_obj or p1_obj:
-        if o1_obj:
-            return redirect(url_for('Search',keys1=Off))
-        elif p1_obj:
-            return  redirect(url_for('Search',keys1=Cas))
+    return render_template("admin_security_clearance.html", data1=pol, head1=pol[0].keys(), data2=crim, head2=crim[0].keys(), flag=True,form=clr_form)
 
 
-    return render_template("admin_security_clearance.html", flag=True, form=clr_form, data1=pol, head1=pol[0].keys(), data2=crim, head2=crim[0].keys())
+@app.route ('/search', methods=['GET','POST'])
+def Search():
+    cl_form = OfficersSearchForm()
+    if cl_form.validate_on_submit():
+        Officer_id = cl_form.Officer_id.data
+        Case_No = cl_form.Case_No.data
+        p1 = police_officers.query.filter_by(Officer_id=Officer_id).first()
+        c1 = crime.query.filter_by(Case_No=Case_No).first()
+        if p1 and c1:
+            stmt1 = 'Select o.Username,o.Officer_id,o.Station,o.Rank,o.Clearance from Users u, police_officers o where o.Username = u.Username and o.officer_id = "'+Officer_id+'"'
+            pol1 = db.session.execute(stmt1).fetchall()
+            stmt2='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND c.Case_No = "'+Case_No+'"'
+            crim2 = db.session.execute(stmt2).fetchall()
+            return render_template("admin_security_clearance.html", data1=pol1, head1=pol1[0].keys(), data2=crim2, head2=crim2[0].keys(), flag=True, form=cl_form)
+
+        elif p1:
+            stmt1 = 'Select o.Username,o.Officer_id,o.Station,o.Rank,o.Clearance from Users u, police_officers o where o.Username = u.Username and o.officer_id = "'+Officer_id+'"'
+            pol1 = db.session.execute(stmt1).fetchall()
+            return render_template('admin_security_clearance.html', data=pol1, head=pol1[0].keys(), flag=False,form=cl_form)
+        elif c1:
+            stmt2='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND c.Case_No = "'+Case_No+'"'
+            crim2 = db.session.execute(stmt2).fetchall()
+            return render_template('admin_security_clearance.html', data=crim2, head=crim2[0].keys(), flag=False,form=cl_form)
+
+    return render_template("admin_security_clearance.html", form=cl_form)
 
 
 
-@app.route ('/search/<keys1>', methods=['GET','POST'])
-def Search(keys1):
-    clr_form = SecurityForm()
-    o1_obj = police_officers.query.filter_by(Officer_id=keys1).first()
-    p1_obj = crime.query.filter_by(Case_No=keys1).first()
-    if o1_obj:
-        stmt1 = 'Select o.Username,o.Officer_id,o.Station,o.Rank,o.Clearance from Users u, police_officers o where o.Username = u.Username and o.officer_id = "'+keys1+'"'
-        pol1 = db.session.execute(stmt1).fetchall()
-        return render_template('admin_security_clearance.html',form=clr_form, data=pol1, head=pol1[0].keys(), flag=False)
-    elif p1_obj:
-        stmt2='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND c.Case_No = "'+keys1+'"'
-        crim2 = db.session.execute(stmt2).fetchall()
-        return render_template('admin_security_clearance.html',form=clr_form, data=crim2, head=crim2[0].keys(), flag=False)
-    return render_template("admin_security_clearance.html", form=clr_form)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -304,14 +329,7 @@ def AddColumn():
             flash("Table Doesnot Exist. Try Again", 'danger')
         return render_template('admin_addcolumn.html')
 
-@app.route ('/ShowReport', methods=['GET','POST'])
-def ShowReport():
-    if current_user.is_authenticated:
-        p=current_user.get_id()
-        stmt='Select c.Case_No,i.Officer_id  AS Investigated_By , co.Criminal_id,cr.Name AS Criminal_Name,c.Crime_date,c.End_date,c.Address,c.Clearance from  police_officers po, investigate_by i ,crime c, criminal cr, Committed_by co where c.Case_No = co.Case_No AND cr.Criminal_id = co.Criminal_id AND i.Case_No = co.Case_No AND po.Clearance <=c.Clearance AND po.username = "'+p+'"'
-        crims = db.session.execute(stmt).fetchall()
-        return render_template('admin_any_table.html', data=crims, head=crims[0].keys(),c=2)
-    return render_template('admin_any_table.html',c=2)
+
 
 
 

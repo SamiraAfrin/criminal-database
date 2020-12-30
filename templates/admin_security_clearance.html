@@ -22,7 +22,7 @@
   <a href='{{ url_for('validate') }}'>Security Clearance</a>
   <a href='{{ url_for('Attr') }}'>Create New Table</a>
   <a href='{{ url_for('AddColumn') }}'>Create New Column</a>
-  <a href='{{ url_for('ShowReport') }}'>Show Report</a>
+
 
 
 </center>
@@ -30,13 +30,7 @@
 <div id=info>
     <center><h3>Security Clearance</h3></center>
     <div id=center>
-		<form action="{{ url_for('validate') }}", method="POST">
-            {{ displayField(form.Off,'Enter Officer ID',autocomplete='off',autofocus=true) }}
-            <br>
-            {{ displayField(form.Cas,'Enter Case Number',autocomplete='off') }}
-            <br>
-            {{ form.submit_button(value='Search') }}
-            <br>
+        <form action="{{ url_for('validate') }}", method="POST">
             {{ displayField(form.Officer_id,'Enter Officer ID',autocomplete='off') }}
             <label for="Clearance">Clearance:</label><br>
 			{{ form.Clearance(class='form-control') }}
@@ -45,11 +39,22 @@
             <br>
 			{{ form.csrf_token }}
 		</form>
-	</div>
+    </div>
     <div>
+        <form action="{{ url_for('Search') }}", method="POST">
+            {{ displayField(form.Officer_id,'Enter Officer ID',autocomplete='off',autofocus=true) }}
+            <br>
+            {{ displayField(form.Case_No,'Enter Case Number',autocomplete='off') }}
+            <br>
+            {{ form.submit_button(value='Search') }}
+            <br>
+        </form>
+        </div>
+        <div>
         {% if flag %}
             {{ displayTable(data1, head1) }}
             {{ displayTable(data2, head2) }}
+
         {% else %}
             {{ displayTable(data,head) }}
         {% endif %}
