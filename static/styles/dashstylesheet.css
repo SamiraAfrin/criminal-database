@@ -46,7 +46,7 @@ div#info {
   overflow-y: auto;
 }
 
-div a {
+div#nav a {
   display: block;
   font-size: 20px;
   padding: 20px;
@@ -65,6 +65,50 @@ form input, select {
   margin-bottom: 20px;
 }
 
+form label {
+  font-size: 18px;
+}
+
+table { border-collapse: collapse; }
+
+tr:nth-child(even) {
+    background: #CCC;
+    border: solid thin;
+}
+tr:nth-child(odd) {
+    background: #FFF;
+    border: solid thin;
+}
+
+td, th {
+    text-align: center;
+    border: solid thin;
+    width: 150px;
+}
+
+#photo_query {
+    width: 390px;
+    float: right;
+}
+#insert_crim {
+    text-align: center;
+    margin: 0 auto;
+    width:112px;
+}
+
+#insert_form {
+    padding-left: 40px;
+}
+
+#insert_form input:not(#submit_button) {
+    width: 95%;
+    padding: 2px;
+}
+
+#insert_form #submit_button {
+    margin-left: 43%;
+}
+
 form input[type="submit"] {
   width: 110px;
   height: 30px;
@@ -79,8 +123,4 @@ form input[type="submit"] {
 form input[type="submit"]:hover {
     background-color: #33ff77CC;
     color: white;
-}
-
-form label {
-  font-size: 18px;
 }

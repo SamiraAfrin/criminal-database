@@ -1,63 +1,102 @@
-{% from 'form_helper.html' import displayField %}
+{% from 'form_helper.html' import displayField, displayTable %}
 
-{% extends "prelogin-layout.html" %}
+{% extends "postlogin-layout.html" %}
 
-{% block metadata %}
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/default.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/dashstylesheet.css') }}">
+{% block title %}<title>Dashboard - Admin</title>{% endblock %}
+
+{% block style %}
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+
+    td,
+    th {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
+<!-- Custom styles for this template -->
+<link href="{{ url_for('static', filename='styles/dashboard.css') }}" rel="stylesheet">
 {% endblock %}
 {% block content %}
-<div id=header>
-  <h1>POLICE DEPARTMENT</h1>
-</div>
-<div id=container>
-<div id=nav>
-<center>
-
-  <!-- Only change the 'This is navigation' to the name of the feature -->
-
-  <a href='{{url_for('Table')}}'> Show Tables</a>
-  <a href='{{ url_for('validate') }}'>Security Clearance</a>
-  <a href='{{ url_for('Attr') }}'>Create New Table</a>
-  <a href='{{ url_for('AddColumn') }}'>Create New Column</a>
- 
-</center>
-</div>
-<div id=info>
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{{url_for('admin_dashboard')}}">
+                    <span data-feather="users"></span>
+                    Profile
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="{{ url_for('Table') }}">
+                    <span data-feather="home"></span>
+                    Show Tables
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('validate') }}">
+                    <span data-feather="file"></span>
+                    Security Clearance
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('Attr') }}">
+                    <span data-feather="shopping-cart"></span>
+                    Add New Crime Genre
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="{{ url_for('AddColumn') }}">
+                    <span data-feather="users"></span>
+                    Create New Column
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Add Column</h1>
+    </div>
     <center>
-        <h3>Add Column </h3>
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {{ messages[0][1] }}
-            {% endif %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+            <strong>{{message}}</strong>
+        </div>
+        {% endfor %}
         {% endwith %}
     </center>
-
-        <form action="{{ url_for('AddColumn') }}", method="POST">
-            <label for="at">Table Name:</label><br>
-            <input type='text' id='name', name='name' placeholder='Table Name'><br>
-
-                <label for="at">Attribute Name:</label><br>
-                <input type="text" id="at" name="at" placeholder="Enter Attribute Name"><br>
-                <label for="id1">Attribute Type :</label><br>
-                <select name="op" id="op">
-                    <option value="0">Select Attrribute Type:</option>
-                    <option value="VARCHAR">String</option>
-                    <option value="INT">Integer</option>
-                    <option value="SMALLINT">SmallInteger</option>
-                    <option value="Date">Date</option>
-                </select><br>
-
-                <label for="ta">Attribute Length:</label><br>
-
-                <input type="number" id="ta" name="ta" placeholder="Attribute Length"><br>
-
-
-                <input type="submit">
-        </form>
-
-</div>
-</div>
+    <br>
+    <form class="form-group" action="{{ url_for('AddColumn') }}" , method="POST">
+        <label class="col-form-label-lg" for="at">Table Name:</label><br>
+        <input class="form-control" type='text' id='name' name='name' placeholder='Table Name'><br>
+        <label class="col-form-label-lg" for="at">Attribute Name:</label><br>
+        <input class="form-control" type="text" id="at" name="at" placeholder="Enter Attribute Name"><br>
+        <label class="col-form-label-lg" for="id1">Attribute Type :</label><br>
+        <select class="form-select" name="op" id="op">
+            <option value="0">Select Attrribute Type:</option>
+            <option value="VARCHAR">String</option>
+            <option value="INT">Integer</option>
+            <option value="SMALLINT">SmallInteger</option>
+            <option value="Date">Date</option>
+        </select><br>
+        <label class="col-form-label-lg" for="ta">Attribute Length:</label><br>
+        <input class="form-control" type="number" id="ta" name="ta" placeholder="Attribute Length"><br>
+        <input class="btn btn-outline-dark" type="submit" value="Submit">
+    </form>
+</main>
 {% endblock %}

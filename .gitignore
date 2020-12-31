@@ -1,3 +1,6 @@
+#Directories
+criminal_images/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -6,16 +9,10 @@ __pycache__/
 # C extensions
 *.so
 
-# Random useless files
-jodi lage 1.py
-jodi lage 2.html
-
 # Distribution / packaging
-venv/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
